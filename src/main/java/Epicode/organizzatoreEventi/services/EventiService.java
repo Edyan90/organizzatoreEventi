@@ -23,7 +23,7 @@ public class EventiService {
     @Autowired
     UtentiService utentiService;
 
-    public Page<Evento> indAll(int page, int size, String sortBy) {
+    public Page<Evento> findAll(int page, int size, String sortBy) {
         if (page > 10) page = 10;
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
         return this.eventiRepository.findAll(pageable);

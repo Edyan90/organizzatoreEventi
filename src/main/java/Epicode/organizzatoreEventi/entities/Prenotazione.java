@@ -4,8 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.UUID;
+
 @Entity
-@Table(name="prenotazioni")
+@Table(name = "prenotazioni")
 @AllArgsConstructor
 @Setter
 @Getter
@@ -17,9 +18,14 @@ public class Prenotazione {
     @Setter(AccessLevel.NONE)
     private UUID id;
     @ManyToOne
-    @JoinColumn(name="evento_id")
+    @JoinColumn(name = "evento_id")
     private Evento evento;
     @ManyToOne
-    @JoinColumn(name="utente_id")
+    @JoinColumn(name = "utente_id")
     private Utente utente;
+
+    public Prenotazione(Evento evento, Utente utente) {
+        this.evento = evento;
+        this.utente = utente;
+    }
 }
