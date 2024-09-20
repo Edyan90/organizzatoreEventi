@@ -27,4 +27,12 @@ public class Evento {
     @JoinColumn(name = "organizzatore_id")
     private Utente organizzatore;
 
+    public Evento(String titolo, String descrizione, LocalDate dataEvento, String luogo, Integer nPostidisponibili, Utente organizzatore) {
+        this.titolo = titolo;
+        this.descrizione = descrizione;
+        this.dataEvento = dataEvento;
+        this.luogo = luogo;
+        this.nPostidisponibili = nPostidisponibili;
+        this.organizzatore = organizzatore;
+    }
 }

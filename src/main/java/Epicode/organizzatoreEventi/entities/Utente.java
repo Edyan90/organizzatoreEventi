@@ -32,10 +32,10 @@ public class Utente {
     @OneToMany(mappedBy = "utente")
     private List<Prenotazione> prenotazioneList;
 
-    public Utente(String email, String password, UtenteType utenteType) {
+    public Utente(String email, String password) {
         this.email = email;
         this.password = password;
-        this.utenteType = utenteType;
+
     }
 
 }
