@@ -59,7 +59,7 @@ public class UtentiService {
                 throw new BadRequestEx("Stato non valido: " + utenteDTO.ruolo() +
                         ". I valori validi sono: PARTECIPANTE E ORGANIZZATORE.");
         }
-
+        this.utentiRepository.save(utente);
         mailgunSender.sendRegistrationEmail(utente);
         return utente;
     }

@@ -1,5 +1,6 @@
 package Epicode.organizzatoreEventi.controllers;
 
+import Epicode.organizzatoreEventi.entities.Utente;
 import Epicode.organizzatoreEventi.exceptions.BadRequestEx;
 import Epicode.organizzatoreEventi.recordsDTO.LoginDTO;
 import Epicode.organizzatoreEventi.recordsDTO.UtenteDTO;
@@ -34,7 +35,9 @@ public class AuthController {
             String messages = validationResult.getAllErrors().stream().map(objectError -> objectError.getDefaultMessage()).collect(Collectors.joining(", "));
             throw new BadRequestEx("Ci sono stati errori nel payload " + messages);
         } else {
-            return new UtenteRespDTO(this.utentiService.save(utenteDTO).getId());
+            Utente utente = this.utentiService.save(utenteDTO);
+            System.out.println(utente);
+            return new UtenteRespDTO(utente.getId());
         }
     }
 }
