@@ -11,10 +11,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
+@Service
 public class EventiService {
     @Autowired
     EventiRepository eventiRepository;
@@ -54,6 +56,12 @@ public class EventiService {
         evento.setLuogo(eventoDTO.luogo());
         evento.setNPostidisponibili(eventoDTO.numerodiPosti());
         evento.setOrganizzatore(this.utentiService.findByID(UUID.fromString(eventoDTO.organizzatoreID())));
+        this.eventiRepository.save(evento);
         return evento;
+    }
+
+    public void findByIDAndDelete(UUID eventoID) {
+        Evento evento = this.findByID(eventoID);
+        this.eventiRepository.delete(evento);
     }
 }
