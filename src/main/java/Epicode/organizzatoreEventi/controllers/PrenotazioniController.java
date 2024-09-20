@@ -42,8 +42,8 @@ public class PrenotazioniController {
                     .collect(Collectors.joining(", "));
             throw new BadRequestEx("Ci sono stati errori nel payload: " + messages);
         } else {
-            this.prenotazioniService.save(prenotazioneDTO);
-            return
+            Prenotazione prenotazione = this.prenotazioniService.save(prenotazioneDTO);
+            return prenotazione;
         }
     }
 

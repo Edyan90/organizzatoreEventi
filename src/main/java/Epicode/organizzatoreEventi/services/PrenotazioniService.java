@@ -41,13 +41,13 @@ public class PrenotazioniService {
         return this.prenotazioniRepository.findById(prenotazioneID).orElseThrow(() -> new NotFoundEx(prenotazioneID));
     }
 
-    public UUID save(PrenotazioneDTO prenotazioneDTO) {
+    public Prenotazione save(PrenotazioneDTO prenotazioneDTO) {
         Utente utente = this.utentiService.findByID(UUID.fromString(prenotazioneDTO.utenteID()));
         Evento evento = this.eventiService.findByID(UUID.fromString(prenotazioneDTO.eventoID()));
         Prenotazione prenotazione = new Prenotazione(evento, utente);
         try {
-            this.prenotazioniRepository.save(prenotazione);
-            return prenotazione.getId();
+            return this.prenotazioniRepository.save(prenotazione);
+
         } catch (Exception e) {
             throw new BadRequestEx("Errore nel salvataggio della prenotazione. Verifica i dati e riprova.");
         }
