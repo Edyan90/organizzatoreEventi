@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -38,6 +39,9 @@ public class EventiService {
             throw new BadRequestEx("la data del evento non può essere precedente alla data di oggi");
         }
         Utente utente = this.utentiService.findByID(UUID.fromString(eventoDTO.organizzatoreID()));
+        if (!utente.getAuthorities().contains(new SimpleGrantedAuthority("ORGANIZZATORE"))) {
+            throw new BadRequestEx("L'utente con ID " + eventoDTO.organizzatoreID() + " non ha il ruolo di organizzatore.");
+        }
         Evento evento = new Evento(
                 eventoDTO.titolo(),
                 eventoDTO.descrizione(),
@@ -55,7 +59,11 @@ public class EventiService {
         evento.setDataEvento(eventoDTO.data());
         evento.setLuogo(eventoDTO.luogo());
         evento.setNPostidisponibili(eventoDTO.numerodiPosti());
-        evento.setOrganizzatore(this.utentiService.findByID(UUID.fromString(eventoDTO.organizzatoreID())));
+        Utente utente = this.utentiService.findByID(UUID.fromString(eventoDTO.organizzatoreID()));
+        if (!utente.getAuthorities().contains(new SimpleGrantedAuthority("ORGANIZZATORE"))) {
+            throw new BadRequestEx("L'utente con ID " + eventoDTO.organizzatoreID() + " non ha il ruolo di organizzatore.");
+        }
+        evento.setOrganizzatore(utente);
         this.eventiRepository.save(evento);
         return evento;
     }

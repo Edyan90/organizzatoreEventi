@@ -13,9 +13,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
+@Service
 public class PrenotazioniService {
     @Autowired
     private PrenotazioniRepository prenotazioniRepository;
@@ -30,16 +33,21 @@ public class PrenotazioniService {
         return this.prenotazioniRepository.findAll(pageable);
     }
 
+    public List<Prenotazione> findPrenotazioni(UUID utenteID) {
+        return this.prenotazioniRepository.findPrenotazioniByID(utenteID);
+    }
+
     public Prenotazione findByID(UUID prenotazioneID) {
         return this.prenotazioniRepository.findById(prenotazioneID).orElseThrow(() -> new NotFoundEx(prenotazioneID));
     }
 
-    public Prenotazione save(PrenotazioneDTO prenotazioneDTO) {
+    public UUID save(PrenotazioneDTO prenotazioneDTO) {
         Utente utente = this.utentiService.findByID(UUID.fromString(prenotazioneDTO.utenteID()));
         Evento evento = this.eventiService.findByID(UUID.fromString(prenotazioneDTO.eventoID()));
         Prenotazione prenotazione = new Prenotazione(evento, utente);
         try {
-            return this.prenotazioniRepository.save(prenotazione);
+            this.prenotazioniRepository.save(prenotazione);
+            return prenotazione.getId();
         } catch (Exception e) {
             throw new BadRequestEx("Errore nel salvataggio della prenotazione. Verifica i dati e riprova.");
         }
