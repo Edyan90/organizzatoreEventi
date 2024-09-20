@@ -67,4 +67,33 @@ public class UtentiService {
     public Utente findByEmail(String email) {
         return this.utentiRepository.findByEmail(email).orElseThrow(() -> new NotFoundEx(email));
     }
+
+    public void findAndDelete(UUID utenteID) {
+        Utente utente = this.findByID(utenteID);
+        this.utentiRepository.delete(utente);
+    }
+
+    public Utente update(UUID utenteID, UtenteDTO utenteDTO) {
+        Utente found = this.findByID(utenteID);
+        this.utentiRepository.findByEmail(utenteDTO.email()).ifPresent(utente -> {
+            if (!utente.getId().equals(utenteID)) {
+                throw new BadRequestEx("L'email " + utenteDTO.email() + " è già in uso!");
+            }
+        });
+        found.setEmail(utenteDTO.email());
+        found.setPassword(utenteDTO.password());
+        switch (utenteDTO.ruolo().toLowerCase()) {
+            case "partecipante":
+                found.setUtenteType(UtenteType.PARTECIPANTE);
+                break;
+            case "organizzatore":
+                found.setUtenteType(UtenteType.ORGANIZZATORE);
+                break;
+
+            default:
+                throw new BadRequestEx("Stato non valido: " + utenteDTO.ruolo() +
+                        ". I valori validi sono: PARTECIPANTE E ORGANIZZATORE.");
+        }
+        return this.utentiRepository.save(found);
+    }
 }
