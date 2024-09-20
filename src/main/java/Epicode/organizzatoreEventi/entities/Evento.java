@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name="eventi")
+@Table(name = "eventi")
 @AllArgsConstructor
 @Setter
 @Getter
@@ -24,7 +24,7 @@ public class Evento {
     private String luogo;
     private Integer nPostidisponibili;
     @ManyToOne
-    @JoinColumn(name="organizzatore")
-    private Utente organizzatore_id;
+    @JoinColumn(name = "organizzatore_id")
+    private Utente organizzatore;
 
 }

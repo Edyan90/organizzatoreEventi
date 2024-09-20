@@ -5,9 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
+
 @Entity
-@Table(name="utenti")
+@Table(name = "utenti")
 @AllArgsConstructor
 @Setter
 @Getter
@@ -23,7 +25,12 @@ public class Utente {
     private String password;
     @Enumerated(EnumType.STRING)
     private UtenteType utenteType;
-
+    @JsonIgnore
+    @OneToMany(mappedBy = "organizzatore")
+    private List<Evento> eventoList;
+    @JsonIgnore
+    @OneToMany(mappedBy = "utente")
+    private List<Prenotazione> prenotazioneList;
 
     public Utente(String email, String password, UtenteType utenteType) {
         this.email = email;
